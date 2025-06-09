@@ -1,0 +1,1037 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Determinación del Coeficiente de Transferencia de Oxígeno en el Proceso CANON</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        :root {
+            --standard-gap: 20px;
+            --standard-padding: 24px;
+            --border-radius: 12px;
+
+            /* Adaptive Color System */
+            --color-primary: #1e40af;
+            --color-secondary: #3730a3;
+            --color-accent: #2563eb;
+            --color-text-light: #f8fafc;
+            --color-text-dark: #1f2937;
+            --color-bg-light: #ffffff;
+            --color-bg-card-glass: rgba(255, 255, 255, 0.15);
+            --color-border-glass: rgba(255, 255, 255, 0.25);
+            --color-border-subtle: rgba(0, 0, 0, 0.1);
+            --color-bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --color-header-accent: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--color-bg-gradient);
+            color: var(--color-text-dark);
+            font-weight: 400;
+        }
+
+        .reveal {
+            font-size: 28px;
+            color: var(--color-text-dark);
+        }
+
+        .slide-content {
+            width: 1200px;
+            height: 700px;
+            display: grid;
+            grid-template-rows: minmax(60px, auto) minmax(1fr, 75%) minmax(50px, auto);
+            gap: var(--standard-gap);
+            position: relative;
+        }
+
+        .slide-header, .slide-footer {
+            padding: 0 var(--standard-padding);
+            display: flex;
+            align-items: center;
+            min-height: 0;
+        }
+
+        .slide-header {
+            background: var(--color-header-accent);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            color: var(--color-text-light);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .slide-header h2 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .slide-header .subtitle {
+            position: relative;
+            z-index: 1;
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-left: 1em;
+            font-weight: 400;
+        }
+
+        .slide-footer {
+            border-top: 2px solid var(--color-accent);
+            opacity: 0.7;
+            font-size: 0.8em;
+            justify-content: space-between;
+        }
+
+        .slide-body {
+            overflow: hidden;
+            min-height: 0;
+            padding: var(--standard-padding);
+            position: relative;
+        }
+
+        .slide-number {
+            left: 12px !important;
+            bottom: 12px !important;
+            color: var(--color-text-dark) !important;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        /* Typography for autofit contexts */
+        .autofit h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 0.4em;
+            line-height: 1.2;
+        }
+        .autofit h2 {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-bottom: 0.3em;
+            line-height: 1.3;
+        }
+        .autofit h3 {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 0.25em;
+            line-height: 1.4;
+            color: var(--color-accent);
+        }
+        .autofit p {
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 0.75em;
+        }
+        .autofit ul, .autofit ol {
+            font-size: 1em;
+            margin-left: 1.2em;
+            margin-bottom: 0.75em;
+            line-height: 1.5;
+        }
+        .autofit li {
+            margin-bottom: 0.3em;
+        }
+        .autofit a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+        .autofit a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.8;
+            color: var(--color-text-dark);
+            font-weight: 400;
+        }
+
+        /* Grid layouts */
+        .two-column {
+            display: grid;
+            grid-template-columns: 48% 48%;
+            gap: var(--standard-gap);
+            min-height: 0;
+            height: 100%;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 31% 31% 31%;
+            gap: var(--standard-gap);
+            min-height: 0;
+            height: 100%;
+        }
+
+        .four-column {
+            display: grid;
+            grid-template-columns: 23% 23% 23% 23%;
+            gap: var(--standard-gap);
+            min-height: 0;
+            height: 100%;
+        }
+
+        /* Content cards */
+        .content-card {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            padding: var(--standard-padding);
+            backdrop-filter: blur(20px);
+            background: var(--color-bg-card-glass);
+            border: 1px solid var(--color-border-glass);
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .content-card .autofit {
+            min-height: 0;
+            flex-grow: 1;
+        }
+
+        /* Special layouts */
+        .title-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+            border-radius: var(--border-radius);
+        }
+
+        .title-slide .autofit {
+            position: relative;
+            z-index: 1;
+            max-width: 90%;
+        }
+
+        .equation-box {
+            background: rgba(30, 64, 175, 0.1);
+            border: 1px solid var(--color-accent);
+            border-radius: var(--border-radius);
+            padding: 1em;
+            margin: 0.5em 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+        }
+
+        .reaction-card {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 58, 138, 0.05) 100%);
+            border: 1px solid var(--color-accent);
+            border-radius: var(--border-radius);
+            padding: 1.5em;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+            margin-bottom: 1em;
+        }
+
+        .flow-step {
+            background: var(--color-bg-card-glass);
+            border: 2px solid var(--color-accent);
+            border-radius: var(--border-radius);
+            padding: 1em;
+            text-align: center;
+            position: relative;
+            margin-bottom: 1em;
+        }
+
+        .flow-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -1.5em;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--color-accent);
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        /* Icons */
+        .icon {
+            color: var(--color-accent);
+            margin-right: 0.5em;
+            font-size: 1.1em;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(30, 58, 138, 0.1) 100%);
+            border-left: 4px solid var(--color-accent);
+            padding: 1em;
+            margin: 0.5em 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        /* List styling */
+        .autofit ul {
+            list-style: none;
+        }
+
+        .autofit ul li::before {
+            content: '\f138';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--color-accent);
+            margin-right: 0.5em;
+        }
+
+        /* Animations */
+        .animated-item {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .reveal .slides section.present .animated-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal .slides section.present .animated-item:nth-child(2) { transition-delay: 0.1s; }
+        .reveal .slides section.present .animated-item:nth-child(3) { transition-delay: 0.2s; }
+        .reveal .slides section.present .animated-item:nth-child(4) { transition-delay: 0.3s; }
+        .reveal .slides section.present .animated-item:nth-child(5) { transition-delay: 0.4s; }
+
+        /* Special emphasis */
+        .emphasis {
+            background: var(--color-header-accent);
+            color: var(--color-text-light);
+            padding: 0.5em 1em;
+            border-radius: var(--border-radius);
+            margin: 0.5em 0;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title Slide -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header"></div>
+                    <div class="slide-body">
+                        <div class="title-slide">
+                            <div class="autofit">
+                                <h1>Determinación del Coeficiente de Transferencia de Oxígeno en el Proceso CANON</h1>
+                                <div class="subtitle">Módulo TM1 - Laboratorio de Procesos Químicos</div>
+                                <br>
+                                <p><strong>Universidad de Concepción</strong><br>
+                                Facultad de Ingeniería<br>
+                                Departamento de Ingeniería Química</p>
+                                <br>
+                                <p><strong>Integrantes Grupo A:</strong><br>
+                                Josué Becerra, Martín Salas, Héctor Serey, Antonia Torres, Claudio Vera</p>
+                                <br>
+                                <p><strong>Profesores:</strong> Constanza Arriagada, Manuel Quiroz</p>
+                                <p><strong>Junio 2025</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer"></div>
+                </div>
+            </section>
+
+            <!-- Slide 2: Context and Problem -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-water icon"></i>Tratamiento de Aguas Contaminadas con Compuestos Nitrogenados</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="two-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-exclamation-triangle icon"></i>Problemática Actual</h3>
+                                    <ul>
+                                        <li>El uso masivo de agua en procesos industriales genera contaminación con compuestos nitrogenados</li>
+                                        <li>Sectores sanitario y agrícola cargan el agua con fertilizantes</li>
+                                        <li>El amonio es altamente neurotóxico para los seres vivos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-lightbulb icon"></i>Solución Biotecnológica</h3>
+                                    <ul>
+                                        <li>Necesidad de procesos biotecnológicos eficientes para desnitrificación</li>
+                                        <li>La biotecnología ofrece alternativas efectivas y rentables</li>
+                                    </ul>
+                                    <div class="highlight-box">
+                                        <strong>La tecnología CANON emerge como una solución innovadora y sostenible</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Contexto y Problemática</span>
+                        <span><i class="fas fa-leaf"></i> Solución Sostenible</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: CANON Process -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-cogs icon"></i>El Proceso CANON</h2>
+                        <div class="subtitle">Completely Autotrophic Nitrogen Removal Over Nitrite</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-info-circle icon"></i>Características Principales</h3>
+                                    <ul>
+                                        <li>Combina nitrificación parcial y proceso ANAMMOX en un solo reactor</li>
+                                        <li>Transforma amonio (NH₄⁺) directamente en nitrógeno molecular (N₂)</li>
+                                        <li>Bajo consumo de oxígeno y sin requerimientos de carbono adicional</li>
+                                        <li>Reduce costos operativos y huella ambiental</li>
+                                        <li>Coexistencia de procesos aeróbicos y anaeróbicos</li>
+                                    </ul>
+                                </div>
+                                <div class="animated-item">
+                                    <div class="emphasis">
+                                        <i class="fas fa-star icon"></i>
+                                        <strong>Proceso revolucionario que optimiza la remoción de nitrógeno con mínimo impacto energético</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Proceso CANON</span>
+                        <span><i class="fas fa-recycle"></i> Tecnología Sostenible</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: Chemical Reactions -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-flask icon"></i>Reacciones Químicas Involucradas</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="three-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-arrow-right icon"></i>Nitrificación Parcial</h3>
+                                    <div class="reaction-card">
+                                        NH₄⁺ + 1.5O₂ → NO₂⁻ + H₂O + 2H⁺
+                                    </div>
+                                    <p>Oxidación del amonio a nitrito con consumo de oxígeno</p>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-arrow-right icon"></i>Proceso ANAMMOX</h3>
+                                    <div class="reaction-card">
+                                        NH₄⁺ + NO₂⁻ → N₂ + 2H₂O
+                                    </div>
+                                    <p>Oxidación anaeróbica del amonio usando nitrito como aceptor de electrones</p>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-equals icon"></i>Reacción Global</h3>
+                                    <div class="reaction-card">
+                                        NH₄⁺ + 0.75O₂ → 0.5N₂ + 1.5H₂O + H⁺
+                                    </div>
+                                    <div class="highlight-box">
+                                        <strong>El oxígeno es el reactivo limitante debido a su baja solubilidad</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Reacciones Químicas</span>
+                        <span><i class="fas fa-atom"></i> Control de Oxígeno Crítico</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: Objectives -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-bullseye icon"></i>Objetivos de la Investigación</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="animated-item">
+                                    <div class="emphasis">
+                                        <h3><i class="fas fa-flag icon"></i>Objetivo General</h3>
+                                        <p>Determinar el coeficiente de transferencia de oxígeno (kLa) y la velocidad específica de consumo de oxígeno (qO) en bacterias nitrificantes</p>
+                                    </div>
+                                </div>
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-list icon"></i>Objetivos Específicos</h3>
+                                    <ul>
+                                        <li>Estudiar el proceso CANON y sus reacciones asociadas</li>
+                                        <li>Aplicar el método dinámico para determinar kLa y qO</li>
+                                        <li>Calcular la tasa específica mediante sólidos volátiles totales</li>
+                                        <li>Analizar el efecto de la temperatura sobre la transferencia de oxígeno</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Objetivos</span>
+                        <span><i class="fas fa-search"></i> Caracterización Experimental</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 6: kLa Fundamentals -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-calculator icon"></i>Coeficiente de Transferencia de Oxígeno (kLa)</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-info-circle icon"></i>Definición y Significado</h3>
+                                    <ul>
+                                        <li>Medida del desempeño de sistemas de aireación y agitación</li>
+                                        <li>Combina coeficiente de transferencia de masa (kL) y área interfacial específica (a)</li>
+                                        <li>Esencial para dimensionar procesos biotecnológicos aeróbicos</li>
+                                    </ul>
+                                </div>
+                                <div class="animated-item">
+                                    <div class="equation-box">
+                                        kLa = kL × a
+                                    </div>
+                                </div>
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-sliders-h icon"></i>Factores Influyentes</h3>
+                                    <ul>
+                                        <li>Temperatura, agitación, tipo de reactor, presencia de biomasa</li>
+                                        <li>Valores esperados: 10⁻⁴ a 10⁻³ s⁻¹</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Fundamentos kLa</span>
+                        <span><i class="fas fa-chart-line"></i> Parámetro Crítico</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 7: Experimental Methods -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-microscope icon"></i>Métodos para Determinar kLa</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="four-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-vial icon"></i>Desoxigenación Química</h3>
+                                    <p>Uso de sulfito sódico, solo sistemas estériles</p>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-balance-scale icon"></i>Equilibrio Estado Estacionario</h3>
+                                    <p>Entrada = consumo, baja precisión</p>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-wind icon"></i>Balance Gaseoso</h3>
+                                    <p>Medición directa de flujos, requiere instrumentación especializada</p>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-play-circle icon"></i>Método Dinámico</h3>
+                                    <p>Interrupción-reanudación de aireación, ideal para biomasa activa</p>
+                                    <div class="highlight-box">
+                                        <strong>SELECCIONADO</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Métodos Experimentales</span>
+                        <span><i class="fas fa-check-circle"></i> Método Dinámico Seleccionado</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Dynamic Method -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-chart-area icon"></i>Método Dinámico Seleccionado</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="two-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-thumbs-up icon"></i>Ventajas del Método</h3>
+                                    <ul>
+                                        <li>Permite trabajar con biomasa real</li>
+                                        <li>Instrumentación sencilla y de bajo costo</li>
+                                        <li>Sensible a cambios en variables de operación</li>
+                                        <li>Incluye efecto del consumo simultáneo de oxígeno</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-cog icon"></i>Principio del Método</h3>
+                                    <p>Monitoreo de re-oxigenación tras período de desoxigenación</p>
+                                    <div class="highlight-box">
+                                        <strong>Condición Crítica:</strong><br>
+                                        Mantener CAL > Ccrit (5-10% saturación)
+                                    </div>
+                                    <div class="equation-box">
+                                        dCAL/dt = kLa(C*AL - CAL) - qOx
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Método Dinámico</span>
+                        <span><i class="fas fa-stopwatch"></i> Técnica Óptima</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 9: Experimental Setup -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-flask icon"></i>Configuración Experimental</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="two-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-list-alt icon"></i>Especificaciones Técnicas</h3>
+                                    <ul>
+                                        <li><strong>Volumen total:</strong> 270 mL</li>
+                                        <li><strong>Composición:</strong> 10 mL biomasa + 249 mL buffer fosfato + 1 mL sustrato</li>
+                                        <li><strong>Sustrato:</strong> Sulfato de amonio (22,86 g/L)</li>
+                                        <li><strong>Temperatura:</strong> 35°C</li>
+                                        <li><strong>Repeticiones:</strong> 3 biorreactores</li>
+                                        <li><strong>Instrumentación:</strong> Sensor Global Water WQ-COND</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-diagram-project icon"></i>Esquema del Reactor</h3>
+                                    <div class="highlight-box">
+                                        <p><i class="fas fa-thermometer-half icon"></i> <strong>Temperatura controlada: 35°C</strong></p>
+                                        <p><i class="fas fa-tint icon"></i> <strong>Agitación constante</strong></p>
+                                        <p><i class="fas fa-air-freshener icon"></i> <strong>Aireación controlada</strong></p>
+                                        <p><i class="fas fa-search icon"></i> <strong>Monitoreo continuo de O₂</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Configuración Experimental</span>
+                        <span><i class="fas fa-temperature-high"></i> 35°C Controlado</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 10: Experimental Procedure -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-tasks icon"></i>Metodología Paso a Paso</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="flow-step animated-item">
+                                    <h3 style="font-size: 2.25em;"><i class="fas fa-play icon" ></i>1. Preparación</h3>
+                                    <p style="font-size: 2.25em;">Buffer fosfato salino y sustrato, ambientación a 35°C</p>
+                                </div>
+                                <div class="flow-step animated-item">
+                                    <h3 style="font-size: 2.25em;"><i class="fas fa-shower icon"></i>2. Lavado de Biomasa</h3>
+                                    <p style="font-size: 2.25em;">3 lavados con buffer para eliminar contaminantes</p>
+                                </div>
+                                <div class="flow-step animated-item">
+                                    <h3 style="font-size: 2.25em;"><i class="fas fa-wind icon"></i>3. Oxigenación Inicial</h3>
+                                    <p style="font-size: 2.25em;">10 minutos para saturar el reactor</p>
+                                </div>
+                                <div class="flow-step animated-item">
+                                    <h3 style="font-size: 2.25em;"><i class="fas fa-flask icon"></i>4. Reacción</h3>
+                                    <p style="font-size: 2.25em;">Inyección de sustrato, 10 minutos de reacción</p>
+                                </div>
+                                <div class="flow-step animated-item">
+                                    <h3 style="font-size: 2.15em;"><i class="fas fa-chart-line icon"></i>5. Re-oxigenación</h3>
+                                    <p style="font-size: 2.15em;">10 minutos de aireación para monitoreo de kLa</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Metodología</span>
+                        <span><i class="fas fa-clock"></i> Proceso de 5 Etapas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 11: Biomass Determination -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-weight icon"></i>Determinación de Biomasa (SVT)</h2>
+                        <div class="subtitle">Método de Sólidos Volátiles Totales</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="three-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-sample icon"></i>Muestreo</h3>
+                                    <p>3 muestras de 5 mL por biorreactor en crisoles</p>
+                                    <div class="highlight-box">
+                                        <strong>Triplicado para precisión estadística</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-thermometer-full icon"></i>Secado y Calcinación</h3>
+                                    <ul>
+                                        <li><strong>Secado:</strong> Horno a 105°C</li>
+                                        <li><strong>Calcinación:</strong> Mufla a 550°C por 30-60 min</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-calculator icon"></i>Cálculo</h3>
+                                    <div class="equation-box">
+                                        SVT = ST - SF
+                                    </div>
+                                    <p><strong>Objetivo:</strong> Determinar concentración de biomasa activa para calcular qO</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Determinación SVT</span>
+                        <span><i class="fas fa-fire icon"></i> Método Gravimétrico</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 12: Data Treatment -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-chart-bar icon"></i>Tratamiento de Datos</h2>
+                        <div class="subtitle">Modelo Matemático y Análisis</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-equals icon"></i>Ecuaciones Fundamentales</h3>
+                                    <div class="equation-box">
+                                        dCAL/dt = kLa(C*AL - CAL) - qOx
+                                    </div>
+                                    <div class="equation-box">
+                                        ln[(C*AL - CAL1)/(C*AL - CAL2)] = kLa(t2 - t1)
+                                    </div>
+                                </div>
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-chart-line icon"></i>Análisis Gráfico</h3>
+                                    <ul>
+                                        <li>Pendiente de ln(C*AL - CAL) vs tiempo = kLa</li>
+                                        <li>Cálculo de qO: qO = QO/x, donde QO es la pendiente de CAL vs tiempo</li>
+                                        <li>Propagación de errores: Desviación estándar muestral</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Tratamiento de Datos</span>
+                        <span><i class="fas fa-calculator"></i> Análisis Matemático</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 13: Expected Results -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-chart-pie icon"></i>Resultados Esperados</h2>
+                        <div class="subtitle">Predicciones Basadas en Literatura</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="two-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-tachometer-alt icon"></i>Parámetros Fisicoquímicos</h3>
+                                    <ul>
+                                        <li><strong>kLa esperado:</strong> 10⁻⁴ - 10⁻³ s⁻¹ para reactores agitados con aireación</li>
+                                        <li><strong>Efecto temperatura:</strong> Aumento de kLa por menor viscosidad y mayor difusión</li>
+                                    </ul>
+                                    <div class="highlight-box">
+                                        Incremento esperado del 20-30% por cada 10°C
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-bacteria icon"></i>Parámetros Biológicos</h3>
+                                    <ul>
+                                        <li><strong>qO esperado:</strong> 10⁻² - 10⁻¹ mg O₂·mgSVT⁻¹·h⁻¹ para biomasa nitrificante</li>
+                                        <li><strong>Actividad biológica:</strong> Incremento de qO hasta temperatura óptima</li>
+                                    </ul>
+                                    <div class="highlight-box">
+                                        Validación mediante diferencias significativas entre tratamientos
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Resultados Esperados</span>
+                        <span><i class="fas fa-book"></i> Basado en Literatura</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 14: Industrial Applications -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-industry icon"></i>Aplicaciones Industriales</h2>
+                        <div class="subtitle">Bioprocesos en la Industria Nacional</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="three-column">
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-tint icon"></i>ESSBIO</h3>
+                                    <p>Aireación de agua y tratamiento de lodos activados</p>
+                                    <div class="highlight-box">
+                                        Optimización de sistemas de aireación
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-mountain icon"></i>CODELCO</h3>
+                                    <p>Biolixiviación con <em>Thiobacillus ferroxidans</em> para extracción de cobre</p>
+                                    <div class="highlight-box">
+                                        Control de oxígeno en bioprocesos mineros
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-card animated-item">
+                                <div class="autofit">
+                                    <h3><i class="fas fa-recycle icon"></i>Proceso CANON</h3>
+                                    <p>Alternativa eficiente para tratamiento de aguas con amoniaco</p>
+                                    <div class="highlight-box">
+                                        <strong>Ventajas:</strong> Menor consumo energético, reducción de costos operativos
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Aplicaciones Industriales</span>
+                        <span><i class="fas fa-globe-americas"></i> Impacto Nacional</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 15: Conclusions -->
+            <section>
+                <div class="slide-content">
+                    <div class="slide-header">
+                        <h2><i class="fas fa-lightbulb icon"></i>Conclusiones y Perspectivas</h2>
+                        <div class="subtitle">Importancia del Estudio y Proyecciones</div>
+                    </div>
+                    <div class="slide-body">
+                        <div class="content-card">
+                            <div class="autofit">
+                                <div class="animated-item">
+                                    <h3><i class="fas fa-key icon"></i>Puntos Clave</h3>
+                                    <ul>
+                                        <li>El control del kLa es crucial para la eficiencia del proceso CANON</li>
+                                        <li>La temperatura afecta tanto la transferencia física como la actividad biológica</li>
+                                        <li>El método dinámico permite caracterización realista con biomasa activa</li>
+                                        <li>Los resultados contribuirán al diseño y optimización de biorreactores industriales</li>
+                                    </ul>
+                                </div>
+                                <div class="animated-item">
+                                    <div class="emphasis">
+                                        <h3><i class="fas fa-rocket icon"></i>Perspectivas Futuras</h3>
+                                        <p>Potencial para implementación en tratamiento de aguas residuales a gran escala con impacto significativo en la sostenibilidad ambiental</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide-footer">
+                        <span>Conclusiones</span>
+                        <span><i class="fas fa-forward"></i> Proyección Industrial</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js JS -->
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: false,
+            center: false,
+            slideNumber: 'c/t',
+            margin: 0.07,
+            width: 1200,
+            height: 700,
+            minScale: 0.2,
+            maxScale: 1.5,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade'
+        });
+
+        // Autofit implementation
+        function isOverflown(el) {
+            return el.scrollHeight > el.clientHeight + 1;
+        }
+
+        function shrinkTextIfNeeded(el, options = {}) {
+            const minFont = options.minFontSize || 8;
+            let originalFont = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+
+            if (!isOverflown(el.parentElement) && !isOverflown(el)) {
+                return;
+            }
+
+            let left = minFont;
+            let right = originalFont;
+
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                el.style.fontSize = mid + 'px';
+
+                if (isOverflown(el.parentElement) || isOverflown(el)) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            let bestFit = right;
+            el.style.fontSize = bestFit + 'px';
+        }
+
+        function applyCustomShrink() {
+            const tableWrappers = document.querySelectorAll('.table-wrapper .autofit');
+            tableWrappers.forEach(el => {
+                shrinkTextIfNeeded(el);
+            });
+
+            const autofitEls = document.querySelectorAll('.autofit');
+            autofitEls.forEach(el => {
+                if (!el.closest('.table-wrapper')) {
+                    shrinkTextIfNeeded(el);
+                }
+            });
+        }
+
+        Reveal.on('ready', function () {
+            setTimeout(applyCustomShrink, 500);
+        });
+        Reveal.on('slidechanged', function () {
+            setTimeout(applyCustomShrink, 500);
+        });
+        Reveal.on('resize', function () {
+            setTimeout(applyCustomShrink, 500);
+        });
+    </script>
+</body>
+</html>
