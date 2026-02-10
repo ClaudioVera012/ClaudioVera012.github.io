@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <polygon points="128,20 220,76 220,180 128,236 36,180 36,76" fill="#1e40af"/>
+  <polygon points="128,32 212,84 212,172 128,224 44,172 44,84" fill="#0891b2"/>
+  <text x="128" y="165" font-family="Arial, sans-serif" font-size="120" font-weight="bold" fill="#1e40af" text-anchor="middle">CV</text>
+</svg>
